@@ -3,6 +3,7 @@ package test.webapp.employee.model;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -71,5 +72,13 @@ public class Department extends ModelEntity {
 		return "Department [id=" + id + ", name=" + name + ", managerId=" + managerId + ", locationId=" + locationId
 				+ "]";
 	}
-	
+	@PrePersist
+	void preInsert() {
+		if(name == null)
+			name = "default_dept_name";
+		if(locationId == 0)
+			locationId = 1;
+		if(managerId == 0)
+			managerId = 1;
+	}
 }
