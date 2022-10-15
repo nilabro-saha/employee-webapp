@@ -1,9 +1,12 @@
 package test.webapp.employee.model;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 //import javax.persistence.ForeignKey;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Min;
@@ -36,21 +39,24 @@ public class Employee extends ModelEntity{
 	@Min(value=5000, message="Salary must be greater than 5000")
 	private double salary;
 	
-	//@ForeignKey
-	@Column(name="DEPARTMENT_ID")
-	@Positive(message="Department ID must be positive")
-	@NotNull
-	private int departmentId;
+//	@Column(name="DEPARTMENT_ID")
+//	@Positive(message="Department ID must be positive")
+//	@NotNull
+//	private int departmentId;
 	
 	@Column(name="MANAGER_ID")
 	@Positive(message="Manager ID must be positive")
 	private int managerId;
 	
+	@OneToOne(cascade=CascadeType.ALL)
+	@JoinColumn(name="DEPARTMENT_ID", referencedColumnName="DEPARTMENT_ID")
+	public Department department;
+	
 	public Employee() {
 		
 	}
 
-	public Employee(int id, String firstName, String lastName, String email, double salary, int departmentId,
+	public Employee(int id, String firstName, String lastName, String email, double salary, Department department,
 			int managerId) {
 		super();
 		this.id = id;
@@ -58,16 +64,16 @@ public class Employee extends ModelEntity{
 		this.lastName = lastName;
 		this.email = email;
 		this.salary = salary;
-		this.departmentId = departmentId;
+		this.department = department;
 		this.managerId = managerId;
 	}
 	
-	public int getDepartmentId() {
-		return departmentId;
-	}
-	public void setDepartmentId(int departmentId) {
-		this.departmentId = departmentId;
-	}
+//	public int getDepartmentId() {
+//		return departmentId;
+//	}
+//	public void setDepartmentId(int departmentId) {
+//		this.departmentId = departmentId;
+//	}
 	
 	public int getId() {
 		return id;
@@ -105,11 +111,17 @@ public class Employee extends ModelEntity{
 	public void setManagerId(int managerId) {
 		this.managerId = managerId;
 	}
+	public Department getDepartment() {
+		return department;
+	}
+	public void setDepartment(Department department) {
+		this.department = department;
+	}
 
 	@Override
 	public String toString() {
 		return "Employee [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", email=" + email
-				+ ", salary=" + salary + ", departmentId=" + departmentId + ", managerId=" + managerId + "]";
+				+ ", salary=" + salary + ", departmentId=" + department + ", managerId=" + managerId + "]";
 	}
 	
 	
